@@ -1,15 +1,12 @@
 const postcontroller = require('./../controllers/post.ctrl')
 
 module.exports = function(router) {
-    /**
-     * get a post
-     */
+    
+    //get a post
     router
         .get('/post/:id',postcontroller.getPost)
 
-    /**
-     * add a post
-     */
+    //add a post
     router
         .post('/post',postcontroller.addPost)
         

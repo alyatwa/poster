@@ -3,14 +3,39 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt-nodejs": "latest",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "connect-flash": "~0.1.1",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-session": "~1.14.1",
+    "helmet": "^3.15.1",
+    "method-override": "~2.3.6",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.4.12",
+    "morgan": "~1.7.0",
+    "nodemailer": "^5.1.1",
+    "nodemailer-sendgrid": "^1.0.3",
+    "passport": "0.4.0",
+    "passport-local": "~1.0.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "react-scripts": "2.1.5"
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.5",
+    "redux": "^4.0.1",
+    "rotating-file-stream": "^1.4.0",
+    "should": "^13.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server/app.js",
+    "test": "mocha",
+    "dfd": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "testreact": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -21,5 +46,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1"
+  }
 }

@@ -18,6 +18,8 @@ let PostSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
+    }, {
+        timestamps: true
     }
 );
 PostSchema.methods.used = function () {

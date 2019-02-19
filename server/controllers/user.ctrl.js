@@ -19,6 +19,9 @@ module.exports = {
             failureFlash: true // allow flash messages
         })
     },*/
+    dashboard: (req, res, next) => {
+        
+    },
     getUser: (req, res, next) => {
         User.findById(req.params.id).then((err, user) => {
             if (err)

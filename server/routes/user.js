@@ -1,6 +1,9 @@
 const usercontroller = require('./../controllers/user.ctrl')
 
 module.exports = function (router, passport) {
+    // Dashboard
+    router
+        .get('/dashboard', isAuthenticated, usercontroller.dashboard)
     // get a user
     router
         .get('/user/:id', isAuthenticated, usercontroller.getUser)
@@ -15,9 +18,12 @@ module.exports = function (router, passport) {
     router
         .get('/profile', isAuthenticated, (req, res) => {
             //console.log('msgprof:', req.user.email,req.flash('loginMessage'));
-                res.send(req.user);
+                //res.send(req.user);
+                res.json({
+                    message: req.user
+                });
             })
-        .post('/profile', isAuthenticated, usercontroller.updateProfile)
+        .put('/profile', isAuthenticated, usercontroller.updateProfile)
         
     // adds a user
     router
@@ -42,7 +48,14 @@ module.exports = function (router, passport) {
             successRedirect: '/profile', // redirect to the secure profile section
             failureRedirect: '/user/login', // redirect back to the signup page if there is an error
             failureFlash: true // allow flash messages
-        }))
+        }),
+        function (req, res) {
+            // If this function gets called, authentication was successful.
+            // `req.user` contains the authenticated user.
+            res.json({
+                message: req.user
+            });
+        })
     
     // verify password
     router

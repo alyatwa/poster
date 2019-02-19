@@ -119,7 +119,7 @@ module.exports = function (passport) {
     // LOCAL LOGIN =============================================================
     // =========================================================================
     // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
+    // by default, if there was no name, it would just be called ' local '
 
     passport.use('login', new LocalStrategy({
             // by default, local strategy uses username and password, we will override with email
@@ -136,9 +136,9 @@ module.exports = function (passport) {
             }, function (err, user) {
 
                 if (!user)
-                    console.log('no user found');
+                    console.log('no user found', err);
                 
-                // if there are any errors, return the error before anything else
+                // if there are any errors, return the error before anything else 
                 if (err)
                     return done(null, false, req.flash('loginMessage', err));
                 // if no user is found, return the message

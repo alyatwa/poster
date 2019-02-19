@@ -32,7 +32,7 @@ module.exports = {
                 else if (!post)
                     res.send(400)
                 else {
-                    return post.addAuthor(req.body.author_id).then((_post) => {
+                    return post.addAuthor(req.user.id).then((_post) => {
                         return res.send(_post)
                     })
                 }
@@ -80,5 +80,39 @@ module.exports = {
                     res.send(post)
                 next()
             })
+    },
+    /**
+     * delete Post
+     */
+    deletePost: (req, res, next) => {
+        Post.deleteOne({
+            _id: req.params.id
+        }, (err) => {
+            if (err) {
+                //return next(err);
+            }
+            console.log('post deleted!');
+            req.flash('info', {
+                msg: 'Your Post has been deleted.'
+            });
+            res.redirect('/dashboard');
+        });
+        },
+    /**
+     * edit Post
+     */
+    editPost: (req, res, next) => {
+        Post.findById(req.params.id, (err, post) => {
+            post.title = req.body.title || req.post.title;
+            post.description = req.body.description || req.post.description;
+            post.category = req.body.title || req.post.category;
+            post.save((err) => {
+                //res.json({ message: 'Successfully edit' });
+                req.flash('success', {
+                    msg: 'Post information has been updated'
+                });
+                res.redirect('/post/' + req.params.id);
+            });
+        })
+        }
     }
-}

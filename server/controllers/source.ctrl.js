@@ -1,26 +1,21 @@
-/** */
 const Source = require('../models/Source')
 
 module.exports = {
     addSource: (req, res, next) => {
         let {
-            title,
-            description,
+            name,
+            slug,
             category,
-            img,
-            template,
-            author
+            imgUrl,
+            platform
         } = req.body
-        //let obj = { text, title, claps, description, feature_img: _feature_img != null ? `/uploads/${_filename}` : '' }
-       
+   
         saveSource({
-                title,
-                description,
+                name,
+                slug,
                 category,
-                usedTimes:0,
-                img,
-                template,
-                author
+                imgUrl,
+                platform
             })
         
 
@@ -31,9 +26,7 @@ module.exports = {
                 else if (!source)
                     res.send(400)
                 else {
-                    return source.addAuthor(req.user.id).then((_source) => {
-                        return res.send(_source)
-                    })
+                    return res.send(source)
                 }
                 next()
             })
@@ -43,8 +36,7 @@ module.exports = {
      * source_id
      */
     getSource: (req, res, next) => {
-        Source.findById(req.params.id)
-            .populate('author').exec((err, source) => {
+        Source.findById(req.params.id).exec((err, source) => {
                 if (err)
                     res.send(err)
                 else if (!source)
@@ -76,9 +68,11 @@ module.exports = {
      */
     editSource: (req, res, next) => {
         Source.findById(req.params.id, (err, source) => {
-            source.title = req.body.title || req.source.title;
-            source.description = req.body.description || req.source.description;
-            source.category = req.body.title || req.source.category;
+            source.title = req.body.name || req.source.name;
+            source.slug = req.body.slug || req.source.slug;
+            source.category = req.body.category || req.source.category;
+            source.imgUrl = req.body.imgUrl || req.source.imgUrl;
+            source.platform = req.body.platform || req.source.platform;
             source.save((err) => {
                 //res.json({ message: 'Successfully edit' });
                 req.flash('success', {

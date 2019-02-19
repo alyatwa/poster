@@ -1,17 +1,17 @@
-const sourcecontroller = require('../controllers/source.ctrl')
+const sourcecontroller = require('./../controllers/source.ctrl')
 
 module.exports = function(router) {
     
     //get a source
     router
         .route('/source/:id')
-        .get(isAuthenticated, sourcecontroller.getPost)
-        .put(isAuthenticated, sourcecontroller.editPost)
-        .delete(isAuthenticated, sourcecontroller.deletePost)
+        .get(isAuthenticated, sourcecontroller.getSource)
+        .put(isAuthenticated, sourcecontroller.editSource)
+        .delete(isAuthenticated, sourcecontroller.deleteSource)
     //add source
     router
         .route('/source')
-        .source(isAuthenticated, sourcecontroller.addPost)
+        .source(isAuthenticated, sourcecontroller.addSource)
     return router;
 }
 // route middleware to make sure 

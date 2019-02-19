@@ -7,6 +7,8 @@ let SourceSchema = new mongoose.Schema(
         category: String,
         imgUrl: String,
         platform: String
+    }, {
+        timestamps: true
     }
 )
 

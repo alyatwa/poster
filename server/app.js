@@ -13,9 +13,10 @@ var flash = require('connect-flash')
 const path = require('path')
 const rfs = require('rotating-file-stream')
 const app = express()
+var router = express.Router()
 const url = "mongodb://aliatwa:159951ali@ds137605.mlab.com:37605/poster" || process.env.MONGODB_URI || "mongodb://localhost:27017/medium"
-var router = express.Router();
-
+var Agenda = require('agenda');
+mongoose.Promise = require('bluebird');
 /** connect to MongoDB datastore */
 try {
     mongoose.connect(url, {
@@ -23,7 +24,12 @@ try {
             useFindAndModify: false,
             useCreateIndex: true
         //useMongoClient: true
-    })
+    }).then(db => {
+                //use some connection with mongoose.
+                let agenda = new Agenda({
+                    mongo: db.connection
+                });
+                agenda.on('ready', function () {})})
 } catch (error) {
 console.log(error);
 

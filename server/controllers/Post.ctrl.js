@@ -7,7 +7,6 @@ module.exports = {
             title,
             description,
             category,
-            usedTimes,
             img,
             template,
             author
@@ -18,7 +17,7 @@ module.exports = {
                 title,
                 description,
                 category,
-                usedTimes,
+                usedTimes:0,
                 img,
                 template,
                 author
@@ -57,11 +56,10 @@ module.exports = {
      * post_id
      */
     addUsedTimes: (req, res, next) => {
-        Post.findById(req.body.post_id).then((post) => {
-            return post.used().then(() => {
-                return res.json({
-                    msg: "Done"
-                })
+        Post.findById(req.params.id).then((post) => {
+            return post.used().then((post) => {
+                return res.json({post})
+                //res.redirect('/post/' + req.params.id);
             })
         }).catch(next)
     },

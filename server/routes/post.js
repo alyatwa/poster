@@ -2,13 +2,17 @@ const postcontroller = require('./../controllers/post.ctrl')
 
 module.exports = function(router) {
     
+    //increase post counter
+    router
+        .route('/post/counter/:id')
+        .put(isAuthenticated, postcontroller.addUsedTimes)
     //get a post
     router
         .route('/post/:id')
         .get(isAuthenticated, postcontroller.getPost)
         .put(isAuthenticated, postcontroller.editPost)
         .delete(isAuthenticated, postcontroller.deletePost)
-        
+    //add post
     router
         .route('/post')
         .post(isAuthenticated, postcontroller.addPost)

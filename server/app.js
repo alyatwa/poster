@@ -20,19 +20,17 @@ mongoose.Promise = require('bluebird');
 /** connect to MongoDB datastore */
 try {
     mongoose.connect(url, {
-            useNewUrlParser: true,
-            useFindAndModify: false,
-            useCreateIndex: true
-        //useMongoClient: true
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useCreateIndex: true
     }).then(db => {
-                //use some connection with mongoose.
-                let agenda = new Agenda({
-                    mongo: db.connection
-                });
-                agenda.on('ready', function () {})})
+        //use some connection with mongoose.
+        let agenda = new Agenda().mongo(db.connection, 'schedules');
+        agenda.on('ready', function (e) {
+        })
+    })
 } catch (error) {
-console.log(error);
-
+    console.log(error);
 }
  
 let port = 5000 || process.env.PORT

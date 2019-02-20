@@ -11,8 +11,6 @@ module.exports = {
             template,
             author
         } = req.body
-        //let obj = { text, title, claps, description, feature_img: _feature_img != null ? `/uploads/${_filename}` : '' }
-       
         savePost({
                 title,
                 description,
@@ -73,7 +71,10 @@ module.exports = {
                 if (err)
                     res.send(err)
                 else if (!post)
-                    res.send(404)
+                    res.status(404).send({
+                        code: "INVALID_POST",
+                        msg: "Oh uh, Post not found"
+                    })
                 else
                     res.send(post)
                 next()
@@ -83,18 +84,32 @@ module.exports = {
      * delete Post
      */
     deletePost: (req, res, next) => {
-        Post.deleteOne({
-            _id: req.params.id
-        }, (err) => {
-            if (err) {
-                //return next(err);
-            }
-            console.log('post deleted!');
-            req.flash('info', {
-                msg: 'Your Post has been deleted.'
-            });
-            res.redirect('/dashboard');
-        });
+        Post.findOne({
+                    _id: req.params.id
+                }, function (err, post) {
+                    if (!post)
+                        {res.status(404).send({
+                            code: "INVALID_POST",
+                            msg: "Oh uh, Post not found"
+                        })} else {
+                            Post.deleteOne({
+                                _id: req.params.id
+                            }, (err) => {
+                                if (err) {
+                                    //return next(err);
+                                    console.log(err);
+                                }
+                                console.log('post deleted!');
+                                req.flash('info', {
+                                    msg: 'Your Post has been deleted.'
+                                });
+                                res.redirect('/dashboard');
+                            });
+                        }
+                })
+
+
+        
         },
     /**
      * edit Post

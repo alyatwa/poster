@@ -20,7 +20,7 @@ module.exports = {
         })
     },*/
     dashboard: (req, res, next) => {
-        
+        res.json({msg:req.user})
     },
     getUser: (req, res, next) => {
         User.findById(req.params.id).then((err, user) => {

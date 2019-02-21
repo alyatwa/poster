@@ -158,9 +158,51 @@ module.exports = {
      * update Schedule Date
      */
     updateSchedule: (req, res, next) => {
-        res.status(200).send({
-            code: "UPDATE_SCHEDULE",
-            msg: "update schedule"
+        Saved.findById(req.params.id, (err, saved) => {
+            if (!saved) {
+                res.status(404).send({
+                    code: "INVALID_Saved",
+                    msg: "Oh uh, Saved not found"
+                })
+            } else {
+                agenda.cancel({
+                        _id: new ObjectId(saved.schedule)
+                    },
+                    (err, numRemoved) => {
+                        console.log(err, numRemoved);
+                        if (err) return res.status(500).send(err)
+
+                    }).then(async job => {
+                    saved.isPublished = false
+                    saved.isScheduled = false
+                    saved.schedule = undefined
+                    saved.save((err, saved) => {
+                        console.log('schedule updated!');
+                        /*res.status(200).send({
+                            saved
+                        })*/
+                        agenda.schedule(
+                            new Date(req.body.date).toISOString(),
+                            //new Date().toISOString(), // accepts Date or string
+                            'schedule post', // the name of the task as defined in archive-ride.js
+                            {
+                                savedId: saved.id
+                            }
+                        ).then(async job => {
+                            saved.isPublished = false
+                            saved.isScheduled = true
+                            saved.schedule = job.attrs._id
+                            saved.save((err) => {
+                                console.log('saved post rescheduled again!');
+                                req.flash('success', {
+                                    msg: 'Saved scheduled!'
+                                });
+                                res.redirect('/saved/' + req.params.id);
+                            })
+                        });
+                    })
+                });
+            }
         })
     },
     /**

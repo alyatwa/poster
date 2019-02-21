@@ -8,7 +8,7 @@ module.exports = function (agenda) {
             //console.log(job.attrs.data.savedId);
             saved.isPublished = true;
             saved.isScheduled = false;
-            //saved.schedule = undefined;
+            saved.schedule = undefined;
             saved.save((err) => {
                 console.log('saved post published');
             })

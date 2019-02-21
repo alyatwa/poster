@@ -1,6 +1,6 @@
 const savedcontroller = require('./../controllers/saved.ctrl')
 
-module.exports = function(router) {
+module.exports = function(router, agenda) {
     
     //get a saved
     router
@@ -12,6 +12,10 @@ module.exports = function(router) {
     router
         .route('/saved/add/:id')
         .post(isAuthenticated, savedcontroller.addSaved)
+    //add schedule
+    /*router
+        .route('/saved/schedule/:id')
+        .post(isAuthenticated, savedcontroller.addSaved)*/
     return router;
 }
 // route middleware to make sure 

@@ -3,7 +3,7 @@ const post = require('./post')
 const source = require('./source')
 const saved = require('./saved')
 
-module.exports = (router, passport) => {
+module.exports = (router, passport, agenda) => {
     router.use('/user', user(router, passport));
     router.use('/post', post(router));
     router.use('/source', source(router));

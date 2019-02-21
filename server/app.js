@@ -14,8 +14,8 @@ const path = require('path')
 const rfs = require('rotating-file-stream')
 const app = express()
 var router = express.Router()
+require('dotenv').config();
 const url = "mongodb://aliatwa:159951ali@ds137605.mlab.com:37605/poster" || process.env.MONGODB_URI || "mongodb://localhost:27017/medium"
-var Agenda = require('agenda');
 mongoose.Promise = require('bluebird');
 /** connect to MongoDB datastore */
 try {
@@ -25,9 +25,10 @@ try {
         useCreateIndex: true
     }).then(db => {
         //use some connection with mongoose.
-        let agenda = new Agenda().mongo(db.connection, 'schedules');
+        /*let agenda = new Agenda().mongo(db.connection, 'schedules');
+        require('./config/jobs/schedule')(agenda);
         agenda.on('ready', function (e) {
-        })
+        })*/
     })
 } catch (error) {
     console.log(error);

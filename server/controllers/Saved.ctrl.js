@@ -1,4 +1,5 @@
 const Saved = require('../models/Saved')
+const agenda = require('../config/agenda')
 
 module.exports = {
     addSaved: (req, res, next) => {
@@ -89,17 +90,38 @@ module.exports = {
      * edit Saved
      */
     editSaved: (req, res, next) => {
+        //console.log(agenda);
         Saved.findById(req.params.id, (err, saved) => {
-            saved.title = req.body.title || req.saved.title;
-            saved.description = req.body.description || req.saved.description;
-            saved.category = req.body.title || req.saved.category;
-            saved.save((err) => {
-                //res.json({ message: 'Successfully edit' });
-                req.flash('success', {
-                    msg: 'Saved information has been updated'
-                });
-                res.redirect('/saved/' + req.params.id);
+            if (!saved) {
+                res.status(404).send({
+                    code: "INVALID_Saved",
+                    msg: "Oh uh, Saved not found"
+                })
+            }else {
+            agenda.schedule(
+                //new Date(req.body.date).toISOString(),
+                new Date().toISOString(), // accepts Date or string
+                'schedule post', // the name of the task as defined in archive-ride.js
+                {
+                    savedId: saved.id
+                } 
+            ).then(async job => {
+                saved.schedule = job.attrs._id
+                saved.save((err) => {
+                    console.log('schedule updated!');
+                })
             });
+            req.flash('success', {
+                    msg: 'Saved scheduled!'
+                });
+            res.redirect('/saved/' + req.params.id);
+        }
+
+            /*saved.save((err) => {
+                //res.json({ message: 'Successfully edit' });
+                
+                res.redirect('/saved/' + req.params.id);
+            });**/
         })
         }
     }

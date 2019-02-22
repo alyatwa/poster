@@ -1,14 +1,19 @@
 const Source = require('../models/Source')
 const Twitter = require('../platform/Twitter')
+const Instagram = require('../platform/Instagram')
 
 module.exports = {
-    addSource:  (req, res, next) => {
-        let slug = req.body.url.match('((https?://)?(www\.)?twitter\.com/)?(@|#!/)?([A-Za-z0-9_]{1,15})(/([-a-z]{1,20}))?')[5];
-        var platform = req.body.url.split('.').reverse()[1].split('//').reverse()[0];
-        
+    addSource: (req, res, next) => {
+        //let slug = req.body.url.match('((https?://)?(www\.)?twitter\.com/)?(@|#!/)?([A-Za-z0-9_]{1,15})(/([-a-z]{1,20}))?')[5];
+        var slug = req.body.url.split('/')[3];
+        var platform = new URL(req.body.url).host.split('.').reverse()[1];
+        console.log(slug, ' ', platform);
+
+        var profile;
         Source.findOne({
-            'slug': slug
-        },async function (err, checksource) {
+            'slug': slug,
+            'platform': platform
+        }, async function (err, checksource) {
             if (checksource) {
                 res.json({
                     code: 'SOURCE_INVALID',
@@ -16,7 +21,19 @@ module.exports = {
                 })
             } else {
                 if (platform === 'twitter') {
-                    var profile = await Twitter.getUser(req.body)
+                    profile = await Twitter.getUser(req.body)
+                } else if (platform === 'instagram') {
+                    profile = await Instagram.getUser(req.body)
+                    if (profile.code) {
+                        res.send(profile)
+                        return;
+                    }
+                } else {
+                    console.log(platform);
+                    res.json({
+                        code: 'PLATFORM_INVALID',
+                        msg: 'no platform found!'
+                    })
                 }
                 new Source(profile).save((err, source) => {
                     if (err)

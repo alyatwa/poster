@@ -31,7 +31,8 @@
     "react-scripts": "2.1.5",
     "redux": "^4.0.1",
     "rotating-file-stream": "^1.4.0",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "twit": "^2.2.11"
   },
   "scripts": {
     "start": "node server/app.js",

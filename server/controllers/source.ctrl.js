@@ -1,36 +1,35 @@
 const Source = require('../models/Source')
+const Twitter = require('../platform/Twitter')
 
 module.exports = {
-    addSource: (req, res, next) => {
-        let {
-            name,
-            slug,
-            category,
-            imgUrl,
-            platform
-        } = req.body
-   
-        saveSource({
-                name,
-                slug,
-                category,
-                imgUrl,
-                platform
-            })
+    addSource:  (req, res, next) => {
+        let slug = req.body.url.match('((https?://)?(www\.)?twitter\.com/)?(@|#!/)?([A-Za-z0-9_]{1,15})(/([-a-z]{1,20}))?')[5];
+        var platform = req.body.url.split('.').reverse()[1].split('//').reverse()[0];
         
-
-        function saveSource(obj) {
-            new Source(obj).save((err, source) => {
-                if (err)
-                    res.send(err)
-                else if (!source)
-                    res.send(400)
-                else {
-                    return res.send(source)
+        Source.findOne({
+            'slug': slug
+        },async function (err, checksource) {
+            if (checksource) {
+                res.json({
+                    code: 'SOURCE_INVALID',
+                    msg: 'source already added!'
+                })
+            } else {
+                if (platform === 'twitter') {
+                    var profile = await Twitter.getUser(req.body)
                 }
-                next()
-            })
-        }
+                new Source(profile).save((err, source) => {
+                    if (err)
+                        res.send(err)
+                    else if (!source)
+                        res.send(400)
+                    else {
+                        return res.send(source)
+                    }
+                    next()
+                })
+            }
+        })
     },
     /**
      * source_id
@@ -40,7 +39,10 @@ module.exports = {
                 if (err)
                     res.send(err)
                 else if (!source)
-                    res.send(404)
+                    res.status(404).send({
+                        code: "INVALID_SOURCE",
+                        msg: "Oh uh, Source not found"
+                    })
                 else
                     res.send(source)
                 next()

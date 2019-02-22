@@ -11,7 +11,7 @@ module.exports = function(router) {
     //add source
     router
         .route('/source')
-        .source(isAuthenticated, sourcecontroller.addSource)
+        .post(isAuthenticated, sourcecontroller.addSource)
     return router;
 }
 // route middleware to make sure 

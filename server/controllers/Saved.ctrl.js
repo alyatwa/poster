@@ -206,7 +206,7 @@ module.exports = {
         })
     },
     /**
-     * set Schedule
+     * set Schedule date to post
      */
     setSchedule: (req, res, next) => {
         Saved.findById(req.params.id, (err, saved) => {

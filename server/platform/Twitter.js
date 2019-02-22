@@ -17,11 +17,14 @@ module.exports = {
             T.get('users/show', {
                 screen_name: username
             }, function (err, data, response) {
+                //console.log(data);
+                
                 let obj = {
                     slug: username,
                     imgUrl: img,
                     platform,
                     category: user.category,
+                    originalId: data.id,
                     lang: user.lang,
                     name: data.name,
                     followersCount: data.followers_count

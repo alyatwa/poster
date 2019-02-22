@@ -1,15 +1,20 @@
 const Source = require('../models/Source')
 const Twitter = require('../platform/Twitter')
 const Instagram = require('../platform/Instagram')
+const Tumblr = require('../platform/Tumblr')
 
 module.exports = {
     addSource: (req, res, next) => {
         //let slug = req.body.url.match('((https?://)?(www\.)?twitter\.com/)?(@|#!/)?([A-Za-z0-9_]{1,15})(/([-a-z]{1,20}))?')[5];
-        var slug = req.body.url.split('/')[3];
-        var platform = new URL(req.body.url).host.split('.').reverse()[1];
+        var profile, slug, url = req.body.url;
+        var platform = new URL(url).host.split('.').reverse()[1];
+        if (platform === 'tumblr') {
+            slug = url.split('.')[0].split('//')[1]
+        } else {
+            slug = url.split('/')[3]
+        }
         console.log(slug, ' ', platform);
 
-        var profile;
         Source.findOne({
             'slug': slug,
             'platform': platform
@@ -28,6 +33,9 @@ module.exports = {
                         res.send(profile)
                         return;
                     }
+                } else if (platform === 'tumblr') {
+                    profile = await Tumblr.getUser(req.body)
+                    res.send(profile)
                 } else {
                     console.log(platform);
                     res.json({
@@ -35,7 +43,7 @@ module.exports = {
                         msg: 'no platform found!'
                     })
                 }
-                new Source(profile).save((err, source) => {
+                /*new Source(profile).save((err, source) => {
                     if (err)
                         res.send(err)
                     else if (!source)
@@ -44,7 +52,7 @@ module.exports = {
                         return res.send(source)
                     }
                     next()
-                })
+                })*/
             }
         })
     },

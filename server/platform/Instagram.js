@@ -16,7 +16,7 @@ module.exports = {
             return Instagram.auth(Instausername, Instapass).then(sessionId => {
                 Instagram.sessionId = sessionId
                 return Instagram.getUserDataByUsername(username).then((data) => {
-                    console.log(data);
+                    //console.log(data);
                     
                     let obj = {
                         slug: username,
@@ -25,6 +25,7 @@ module.exports = {
                         category: user.category,
                         lang: user.lang,
                         name: data.graphql.user.full_name,
+                        originalId: data.graphql.user.id,
                         followersCount: data.graphql.user.edge_followed_by.count
                     }
                     return resolve(obj)

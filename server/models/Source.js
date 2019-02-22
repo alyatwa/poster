@@ -5,6 +5,7 @@ let SourceSchema = new mongoose.Schema(
         name: String,
         followersCount: Number,
         slug: String,
+        originalId: String,
         category: String,
         imgUrl: String,
         platform: String,

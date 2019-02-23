@@ -6,10 +6,15 @@ let PostSchema = new mongoose.Schema(
         description: String,
         category: String,
         usedTimes: Number,
-        img: {
-            data: Buffer,
-            contentType: String
-        },
+        img: String,
+        video: String,
+        gif: String,
+        type: String,
+        permalink: String,
+        originalId: String,
+        slug: String,
+        likes: Number,
+        lang: String,
         template: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Template'

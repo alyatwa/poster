@@ -7,6 +7,9 @@ let agenda = new Agenda({
     db: {
         address: mongoConnectionString,
         collection: 'schedules'
+    }, 
+    options: {
+        useNewUrlParser: true
     }
 });
 let jobTypes = process.env.JOB_TYPES ? process.env.JOB_TYPES.split(',') : [];

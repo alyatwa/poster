@@ -1,9 +1,30 @@
-/** */
 const Post = require('./../models/Post')
+const Reddit = require('../platform/Reddit')
 
 module.exports = {
-    addPost: (req, res, next) => {
-        let {
+    addPost: async (req, res, next) => {
+        var post, slug, url = req.body.url;
+        var platform = new URL(url).host.split('.').reverse()[1];
+        if (platform === 'tumblr') {
+            slug = url.split('.')[0].split('//')[1]
+        } else if (platform === 'reddit') {
+            slug = url.split('/')[6]
+        } else {
+            slug = url.split('/')[3]
+        }
+        console.log(slug, ' ', platform);
+
+        if (platform === 'reddit') {
+            post = await Reddit.getPost(req.body)
+            res.send(post)
+            /*if (post.code) {
+                res.send(post)
+                return;
+            }*/
+        }
+        
+        
+        /*let {
             title,
             description,
             category,
@@ -35,7 +56,7 @@ module.exports = {
                 }
                 next()
             })
-        }
+        }*/
     },
     getAll: (req, res, next) => {
         Post.find(req.params.id)

@@ -55,7 +55,7 @@ module.exports = {
                 } else if (data.__typename === 'GraphVideo') {
                     type = 'video'
                 }
-                console.log(type, "@@@ ", data.__typename);
+                
                 let obj = {
                     slug: data.owner.username,
                     likes: data.edge_media_preview_like.count,
@@ -65,6 +65,7 @@ module.exports = {
                     category: post.category,
                     originalId: postId,
                     lang: post.lang,
+                    publishedDate: new Date(data.taken_at_timestamp * 1000).toISOString(),
                     img: ((data.thumbnail_src) ? data.thumbnail_src : data.display_url),
                     video: ((data.is_video) ? data.video_url : undefined),
                     type,

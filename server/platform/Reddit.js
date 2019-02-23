@@ -67,6 +67,7 @@ module.exports = {
                     gif: ((type === 'gif' && data.media) ? data.media.oembed.thumbnail_url : undefined),
                     type,
                     title: data.title,
+                    publishedDate: new Date(data.created_utc * 1000).toISOString(),
                     description: data.selftext
                 }
                 return resolve(obj)

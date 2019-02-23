@@ -6,6 +6,7 @@ let PostSchema = new mongoose.Schema(
         description: String,
         category: String,
         usedTimes: Number,
+        publishedDate: Date,
         img: String,
         video: String,
         gif: String,

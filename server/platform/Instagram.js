@@ -16,8 +16,6 @@ module.exports = {
             return Instagram.auth(Instausername, Instapass).then(sessionId => {
                 Instagram.sessionId = sessionId
                 return Instagram.getUserDataByUsername(username).then((data) => {
-                    //console.log(data);
-                    
                     let obj = {
                         slug: username,
                         imgUrl: data.graphql.user.profile_pic_url_hd,

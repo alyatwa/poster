@@ -17,8 +17,12 @@ module.exports = {
             T.get('users/show', {
                 screen_name: username
             }, function (err, data, response) {
-                //console.log(data);
-                
+                if (err) {
+                    return resolve({
+                        code: 'ERROR_PROFILE',
+                        msg: 'Profile not found!'
+                    })
+                } else {
                 let obj = {
                     slug: username,
                     imgUrl: img,
@@ -29,7 +33,7 @@ module.exports = {
                     name: data.name,
                     followersCount: data.followers_count
                 }
-                return resolve(obj)
+                return resolve(obj)}
             })
         })
         // return {username, img, platform}

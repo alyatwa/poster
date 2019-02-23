@@ -21,6 +21,10 @@ module.exports = {
 
         if (platform === 'twitter') {
             profile = await Twitter.getUser(req.body)
+            if (profile.code) {
+                res.send(profile)
+                return;
+            }
         } else if (platform === 'instagram') {
             profile = await Instagram.getUser(req.body)
             if (profile.code) {
@@ -29,7 +33,10 @@ module.exports = {
             }
         } else if (platform === 'tumblr') {
             profile = await Tumblr.getUser(req.body)
-            res.send(profile)
+            if (profile.code) {
+                res.send(profile)
+                return;
+            }
         } else if (platform === 'reddit') {
             profile = await Reddit.getUser(req.body)
             if (profile.code) {
@@ -43,6 +50,7 @@ module.exports = {
                 code: 'PLATFORM_INVALID',
                 msg: 'no platform found!'
             })
+            return;
         }
         Source.findOneAndUpdate({
             'slug': slug,

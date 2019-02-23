@@ -11,6 +11,12 @@ module.exports = {
         var blogName = blog.url.split('.')[0].split('//')[1];
         var platform = 'tumblr', obj
         client.blogInfo(blogName + '.tumblr.com', (err, data) => {
+            if (err) {
+                return resolve({
+                    code: 'ERROR_PROFILE',
+                    msg: 'Profile not found!'
+                })
+            } else {
             client.blogAvatar(blogName + '.tumblr.com', function (err, ava) {
             obj = {
                 slug: blogName,
@@ -22,7 +28,7 @@ module.exports = {
                 name: data.blog.title
             }
             return resolve(obj)
-            });
+            });}
             });
         });
     }

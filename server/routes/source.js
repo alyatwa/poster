@@ -6,7 +6,7 @@ module.exports = function(router) {
     router
         .route('/source/:id')
         .get(isAuthenticated, sourcecontroller.getSource)
-        .put(isAuthenticated, sourcecontroller.editSource)
+        //.put(isAuthenticated, sourcecontroller.editSource)
         .delete(isAuthenticated, sourcecontroller.deleteSource)
     //add source
     router

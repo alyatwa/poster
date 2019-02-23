@@ -2,58 +2,57 @@ const Source = require('../models/Source')
 const Twitter = require('../platform/Twitter')
 const Instagram = require('../platform/Instagram')
 const Tumblr = require('../platform/Tumblr')
+const Reddit = require('../platform/Reddit')
 
 module.exports = {
-    addSource: (req, res, next) => {
+    addSource: async  (req, res, next) => {
         //let slug = req.body.url.match('((https?://)?(www\.)?twitter\.com/)?(@|#!/)?([A-Za-z0-9_]{1,15})(/([-a-z]{1,20}))?')[5];
         var profile, slug, url = req.body.url;
         var platform = new URL(url).host.split('.').reverse()[1];
         if (platform === 'tumblr') {
             slug = url.split('.')[0].split('//')[1]
-        } else {
+        } else if (platform === 'reddit') {
+            slug = url.split('/')[4]
+        }
+        else {
             slug = url.split('/')[3]
         }
-        console.log(slug, ' ', platform);
+        console.log(slug,' ', platform);
 
-        Source.findOne({
+        if (platform === 'twitter') {
+            profile = await Twitter.getUser(req.body)
+        } else if (platform === 'instagram') {
+            profile = await Instagram.getUser(req.body)
+            if (profile.code) {
+                res.send(profile)
+                return;
+            }
+        } else if (platform === 'tumblr') {
+            profile = await Tumblr.getUser(req.body)
+            res.send(profile)
+        } else if (platform === 'reddit') {
+            profile = await Reddit.getUser(req.body)
+            if (profile.code) {
+                res.send(profile)
+                return;
+            }
+            //res.send(profile)
+        } else {
+            console.log(platform);
+            res.json({
+                code: 'PLATFORM_INVALID',
+                msg: 'no platform found!'
+            })
+        }
+        Source.findOneAndUpdate({
             'slug': slug,
             'platform': platform
-        }, async function (err, checksource) {
-            if (checksource) {
-                res.json({
-                    code: 'SOURCE_INVALID',
-                    msg: 'source already added!'
-                })
-            } else {
-                if (platform === 'twitter') {
-                    profile = await Twitter.getUser(req.body)
-                } else if (platform === 'instagram') {
-                    profile = await Instagram.getUser(req.body)
-                    if (profile.code) {
-                        res.send(profile)
-                        return;
-                    }
-                } else if (platform === 'tumblr') {
-                    profile = await Tumblr.getUser(req.body)
-                    res.send(profile)
-                } else {
-                    console.log(platform);
-                    res.json({
-                        code: 'PLATFORM_INVALID',
-                        msg: 'no platform found!'
-                    })
-                }
-                /*new Source(profile).save((err, source) => {
-                    if (err)
-                        res.send(err)
-                    else if (!source)
-                        res.send(400)
-                    else {
-                        return res.send(source)
-                    }
-                    next()
-                })*/
-            }
+        }, profile, {
+            upsert: true,
+            new: true
+        },
+          function (err, source) {
+              res.send(source)
         })
     },
     /**
@@ -89,24 +88,44 @@ module.exports = {
             });
             res.redirect('/dashboard');
         });
-        },
-    /**
-     * edit Source
-     */
-    editSource: (req, res, next) => {
-        Source.findById(req.params.id, (err, source) => {
-            source.title = req.body.name || req.source.name;
-            source.slug = req.body.slug || req.source.slug;
-            source.category = req.body.category || req.source.category;
-            source.imgUrl = req.body.imgUrl || req.source.imgUrl;
-            source.platform = req.body.platform || req.source.platform;
-            source.save((err) => {
-                //res.json({ message: 'Successfully edit' });
-                req.flash('success', {
-                    msg: 'Source information has been updated'
-                });
-                res.redirect('/source/' + req.params.id);
-            });
-        })
         }
     }
+     /*function getUser(data) {
+         var profile, slug, url = data.url;
+         var platform = new URL(url).host.split('.').reverse()[1];
+         if (platform === 'tumblr') {
+             slug = url.split('.')[0].split('//')[1]
+         } else if (platform === 'reddit') {
+             slug = url.split('/')[4]
+         } else {
+             slug = url.split('/')[3]
+         }
+         
+        return new Promise(resolve => {
+            Source.findOne({ // test return 
+                     'slug': slug,
+                     'platform': platform
+                 },  function (err, checksource) {
+                         if (checksource) {
+                             profile = {
+                                 code: 'SOURCE_INVALID',
+                                 msg: 'source already added!'
+                             }
+                         }})
+            if (platform === 'twitter') {
+                profile = Twitter.getUser(data)
+            } else if (platform === 'instagram') {
+                profile = Instagram.getUser(data)
+            } else if (platform === 'tumblr') {
+                profile = Tumblr.getUser(data)
+            } else if (platform === 'reddit') {
+                profile = Reddit.getUser(data)
+            } else {
+                profile={
+                    code: 'PLATFORM_INVALID',
+                    msg: 'no platform found!'
+                }
+            }
+            resolve(profile)
+        })
+     }*/

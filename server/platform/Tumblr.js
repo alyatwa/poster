@@ -9,7 +9,6 @@ module.exports = {
     getUser: (blog) => {
         return new Promise(resolve => {
         var blogName = blog.url.split('.')[0].split('//')[1];
-        console.log('blogName: ', blogName);
         var platform = 'tumblr', obj
         client.blogInfo(blogName + '.tumblr.com', (err, data) => {
             client.blogAvatar(blogName + '.tumblr.com', function (err, ava) {

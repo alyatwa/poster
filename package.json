@@ -17,6 +17,7 @@
     "express-session": "~1.14.1",
     "helmet": "^3.15.1",
     "instagram-nodejs-without-api": "^1.2.0",
+    "instagram-web-api": "^2.0.0",
     "method-override": "~2.3.6",
     "mocha": "^5.2.0",
     "mongoose": "^5.4.12",
@@ -34,11 +35,12 @@
     "rotating-file-stream": "^1.4.0",
     "should": "^13.2.3",
     "snoowrap": "^1.15.2",
+    "tough-cookie-filestore2": "^1.0.0",
     "tumblr.js": "^2.0.0",
     "twit": "^2.2.11"
   },
   "scripts": {
-    "start": "node server/app.js",
+    "start": "node server/app.js --config cookies.json",
     "test": "mocha",
     "dfd": "react-scripts start",
     "build": "react-scripts build",
@@ -47,6 +49,9 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "nodemonConfig": {
+    "ignore": ["cookies.json", "cookies", "./cookies.json"]
   },
   "browserslist": [
     ">0.2%",

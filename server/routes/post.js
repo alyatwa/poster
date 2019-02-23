@@ -15,7 +15,7 @@ module.exports = function(router) {
     //add post
     router
         .route('/post')
-        .post(isAuthenticated, postcontroller.addPost)
+        .post( postcontroller.addPost)
     return router;
 }
 // route middleware to make sure 

@@ -52,7 +52,8 @@ module.exports = {
             })
             return;
         }
-        Source.findOneAndUpdate({
+        res.send(profile)
+        /*Source.findOneAndUpdate({
             'slug': slug,
             'platform': platform
         }, profile, {
@@ -61,7 +62,7 @@ module.exports = {
         },
           function (err, source) {
               res.send(source)
-        })
+        })*/
     },
     /**
      * source_id

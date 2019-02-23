@@ -14,6 +14,7 @@ let PostSchema = new mongoose.Schema(
         originalId: String,
         slug: String,
         likes: Number,
+        comments: Number,
         lang: String,
         template: {
             type: mongoose.Schema.Types.ObjectId,

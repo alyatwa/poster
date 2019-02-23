@@ -56,6 +56,7 @@ module.exports = {
                     slug: data.author.name,
                     imgUrl: data.icon_img,
                     likes: data.ups,
+                    comments: data.num_comments,
                     permalink: data.permalink,
                     platform,
                     category: post.category,

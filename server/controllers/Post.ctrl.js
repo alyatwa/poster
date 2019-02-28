@@ -3,6 +3,7 @@ const Reddit = require('../platform/Reddit')
 const Instagram = require('../platform/Instagram')
 const Twitter = require('../platform/Twitter')
 const Imgur = require('../platform/Imgur')
+const Tumblr = require('../platform/Tumblr')
 
 module.exports = {
     addPost: async (req, res, next) => {
@@ -32,6 +33,9 @@ module.exports = {
             res.send(post)
         } else if (platform === 'imgur') {
             post = await Imgur.getPost(req.body)
+            res.send(post)
+        } else if (platform === 'tumblr') {
+            post = await Tumblr.getPost(req.body)
             res.send(post)
         }
         

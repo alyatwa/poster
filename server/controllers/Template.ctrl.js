@@ -27,22 +27,42 @@ module.exports = {
             })
         }
     },
-    /*getAll: (req, res, next) => {
-        Template.find(req.params.id)
-            .populate('author').exec((err, template) => {
-                if (err)
-                    res.send(err)
-                else if (!template)
-                    res.send(404)
-                else
-                    res.send(template)
-                next()
-            })
-    },*/
-
 
     /**
-     * template_id
+     * del template
+     */
+    deleteTemplate: (req, res, next) => {
+        Template.deleteOne({
+            _id: req.params.id
+        }, (err) => {
+            if (err) {
+                //return next(err);
+            }
+            console.log('template deleted!');
+            req.flash('info', {
+                msg: 'Template has been deleted.'
+            });
+            res.redirect('/dashboard');
+        });
+    },
+
+    /**
+     * edit template
+     */
+
+    editTemplate: (req, res, next) => {
+        Template.findOneAndUpdate({
+            _id: req.params.id
+        },{$set:{dimensions:720,img:'00'}}, (err, template) => {
+            if (err) {
+                //return next(err);
+            }
+            res.send(template);
+        });
+    },
+
+    /**
+     * get template
      */
     getTemplate: (req, res, next) => {
         Template.findById(req.params.id).exec((err, template) => {

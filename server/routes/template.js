@@ -7,12 +7,28 @@ module.exports = (router) => {
      */
     router
         .route('/template/:id')
-        .get(templatecontroller.getTemplate)
+        .get(isAuthenticated, templatecontroller.getTemplate)
+        .put(isAuthenticated, templatecontroller.editTemplate)
+        .delete(isAuthenticated, templatecontroller.deleteTemplate)
 
     /**
      * add a template
      */
     router
         .route('/template')
-        .template(templatecontroller.addTemplate)
+        .post(isAuthenticated, templatecontroller.addTemplate)
+
+    return router;
+}
+
+// route middleware to make sure 
+function isAuthenticated(req, res, next) {
+    console.log(req.isAuthenticated());
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if isAuthenticated ==k false
+    res.redirect('/');
 }

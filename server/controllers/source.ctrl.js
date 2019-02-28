@@ -43,7 +43,6 @@ module.exports = {
                 res.send(profile)
                 return;
             }
-            //res.send(profile)
         } else {
             console.log(platform);
             res.json({

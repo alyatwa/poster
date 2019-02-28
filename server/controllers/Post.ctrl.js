@@ -20,59 +20,59 @@ module.exports = {
 
         if (platform === 'reddit') {
             post = await Reddit.getPost(req.body)
-            res.send(post)
-            /*if (post.code) {
+            if (post.code) {
                 res.send(post)
                 return;
-            }*/
+            }
         } else if (platform === 'instagram') {
             post = await Instagram.getPost(req.body)
-            res.send(post)
+            if (post.code) {
+                res.send(post)
+                return;
+            }
         } else if (platform === 'twitter') {
             post = await Twitter.getPost(req.body)
-            res.send(post)
+            if (post.code) {
+                res.send(post)
+                return;
+            }
         } else if (platform === 'imgur') {
             post = await Imgur.getPost(req.body)
-            res.send(post)
+            if (post.code) {
+                res.send(post)
+                return;
+            }
         } else if (platform === 'tumblr') {
             post = await Tumblr.getPost(req.body)
-            res.send(post)
+            if (post.code) {
+                res.send(post)
+                return;
+            }
+        } else {
+            console.log(platform);
+            res.json({
+                code: 'PLATFORM_INVALID',
+                msg: 'no platform found!'
+            })
+            return;
         }
-        
-        
-        /*let {
-            title,
-            description,
-            category,
-            img,
-            template,
-            author
-        } = req.body
-        savePost({
-                title,
-                description,
-                category,
-                usedTimes:0,
-                img,
-                template,
-                author
-            })
-        
-
-        function savePost(obj) {
-            new Post(obj).save((err, post) => {
+        var metadata = {
+            author: req.user.id,
+            template: req.body.template,
+            usedTimes: 0
+        }
+        let combined = Object.assign(post, metadata);
+        Post.findOneAndUpdate({
+                'originalId': combined.originalId
+            }, combined, {
+                upsert: true,
+                new: true
+            },
+            function (err, post) {
+                res.send(post)
                 if (err)
-                    res.send(err)
-                else if (!post)
-                    res.send(400)
-                else {
-                    return post.addAuthor(req.user.id).then((_post) => {
-                        return res.send(_post)
-                    })
-                }
-                next()
+                    console.log(err);
             })
-        }*/
     },
     getAll: (req, res, next) => {
         Post.find(req.params.id)
@@ -93,7 +93,9 @@ module.exports = {
     addUsedTimes: (req, res, next) => {
         Post.findById(req.params.id).then((post) => {
             return post.used().then((post) => {
-                return res.json({post})
+                return res.json({
+                    post
+                })
                 //res.redirect('/post/' + req.params.id);
             })
         }).catch(next)
@@ -122,32 +124,33 @@ module.exports = {
      */
     deletePost: (req, res, next) => {
         Post.findOne({
-                    _id: req.params.id
-                }, function (err, post) {
-                    if (!post)
-                        {res.status(404).send({
-                            code: "INVALID_POST",
-                            msg: "Oh uh, Post not found"
-                        })} else {
-                            Post.deleteOne({
-                                _id: req.params.id
-                            }, (err) => {
-                                if (err) {
-                                    //return next(err);
-                                    console.log(err);
-                                }
-                                console.log('post deleted!');
-                                req.flash('info', {
-                                    msg: 'Your Post has been deleted.'
-                                });
-                                res.redirect('/dashboard');
-                            });
-                        }
+            _id: req.params.id
+        }, function (err, post) {
+            if (!post) {
+                res.status(404).send({
+                    code: "INVALID_POST",
+                    msg: "Oh uh, Post not found"
                 })
+            } else {
+                Post.deleteOne({
+                    _id: req.params.id
+                }, (err) => {
+                    if (err) {
+                        //return next(err);
+                        console.log(err);
+                    }
+                    console.log('post deleted!');
+                    req.flash('info', {
+                        msg: 'Your Post has been deleted.'
+                    });
+                    res.redirect('/dashboard');
+                });
+            }
+        })
 
 
-        
-        },
+
+    },
     /**
      * edit Post
      */
@@ -164,5 +167,5 @@ module.exports = {
                 res.redirect('/post/' + req.params.id);
             });
         })
-        }
     }
+}

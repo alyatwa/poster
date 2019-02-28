@@ -16,6 +16,7 @@
     "express": "^4.16.4",
     "express-session": "~1.14.1",
     "helmet": "^3.15.1",
+    "imgur": "^0.3.1",
     "instagram-nodejs-without-api": "^1.2.0",
     "instagram-web-api": "^2.0.0",
     "method-override": "~2.3.6",
@@ -51,7 +52,11 @@
     "extends": "react-app"
   },
   "nodemonConfig": {
-    "ignore": ["cookies.json", "cookies", "./cookies.json"]
+    "ignore": [
+      "cookies.json",
+      "cookies",
+      "./cookies.json"
+    ]
   },
   "browserslist": [
     ">0.2%",

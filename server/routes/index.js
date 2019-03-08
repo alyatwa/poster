@@ -4,6 +4,7 @@ const source = require('./source')
 const saved = require('./saved')
 const template = require('./template')
 const plan = require('./plan')
+const subscription = require('./subscription')
 
 module.exports = (router, passport) => {
     router.use('/user', user(router, passport));
@@ -12,5 +13,6 @@ module.exports = (router, passport) => {
     router.use('/saved', saved(router));
     router.use('/template', template(router));
     router.use('/plan', plan(router));
+    router.use('/subscription', subscription(router));
     return router;
 }

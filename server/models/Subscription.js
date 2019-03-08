@@ -4,8 +4,11 @@ let SubscriptionSchema = new mongoose.Schema({
 
     startTime: Date,
     endTime: Date,
-    credits: Number,
-    renewed: Boolean,
+    subscriptionStatus: String,
+    paypal: {
+        last_txn_id: String,
+        profileID: String,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

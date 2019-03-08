@@ -9,6 +9,7 @@ module.exports = {
         var platform = 'imgur', obj
         imgur.getInfo(imgId)
             .then(function (data) {
+                let type;
                 if (data.type === 'image/gif') {
                         type = 'gif'
                     } else if (data.type === 'image/jpeg') {

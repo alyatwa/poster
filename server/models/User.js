@@ -24,6 +24,10 @@ let UserSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Plan'
         },
+        subscription: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Subscription'
+        },
         schedules: [
             {
                 type: mongoose.Schema.Types.ObjectId,

@@ -8,15 +8,27 @@ module.exports = (router) => {
     router
         .route('/subscription/:id')
         .get(isAuthenticated, subscriptioncontroller.getSubscription)
-        .put(isAuthenticated, subscriptioncontroller.editSubscription)
-        .delete(isAuthenticated, subscriptioncontroller.deleteSubscription)
 
     /**
      * add a subscription
      */
     router
         .route('/subscription')
-        .post(isAuthenticated, subscriptioncontroller.addSubscription)
+        .post(subscriptioncontroller.addSubscription)
+        .put(subscriptioncontroller.cancelSubscription)
+        .get(subscriptioncontroller.getSubscription)
+    /**
+     * Refund
+     */
+    router
+        .route('/subscription/refund')
+        .post(isAuthenticated, subscriptioncontroller.refundSubscription)
+    /**
+     * IPN Lisenter
+     */
+    router
+        .route('/ipn')
+        .post(subscriptioncontroller.IPN)
 
     return router;
 }

@@ -5,15 +5,11 @@ const User = require('./../models/User')
 var self = module.exports = {
     addSubscription: (req, res, next) => {
         let {
-            startTime,
-            endTime,
             plan,
             user
         } = req.body
  
         saveSubscription({
-                startTime,
-                endTime,
                 plan,
                 user
             })
@@ -98,6 +94,15 @@ var self = module.exports = {
             }
         })
     },
+    /**
+     * get Txn by id
+     */
+    getTxnById: async (req, res, next) => {
+         var transaction = await Paypal.getTxn(req.params.id);
+         res.send(transaction)
+    },
+
+
 
     refundSubscription: async (req, res, next) => {
         var saleid = req.body.saleid;
@@ -133,6 +138,7 @@ var self = module.exports = {
         if (ipnJSON && ipnJSON.txn_type === 'subscr_payment') {
             update["$set"]["paypal.last_txn_id"] = ipnJSON.txn_id
             update["$set"]["paypal.profileID"] = ipnJSON.subscr_id
+            update["$set"]["startTime"] = new Date()
         }
         update["$set"]["subscriptionStatus"] = subscriptionStatus
         Subscription.findOneAndUpdate({
@@ -153,12 +159,12 @@ var self = module.exports = {
      */
     IPN: async (req, res, next) => {
         const body = req.body;
-        /*const isValidated = await Paypal.validate(body);
+        const isValidated = await Paypal.validate(body);
         if (!isValidated) {
             console.error('Error validating IPN message.');
             //return;
         }
-        console.log('isValidated:  ', isValidated);*/
+        console.log('isValidated:  ', isValidated);
         console.log(body);
         if (body.reason_code) self.updateSubscription('refund', body.custom, body);
         const transactionType = body.txn_type;

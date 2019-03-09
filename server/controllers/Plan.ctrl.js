@@ -7,14 +7,18 @@ module.exports = {
             name,
             description,
             price,
-            credits
+            frequency,
+            type,
+            paypalURLBtn
         } = req.body
  
         savePlan({
                 name,
                 description,
                 price,
-                credits
+                frequency,
+                type,
+                paypalURLBtn
             })
 
         function savePlan(obj) {
@@ -24,7 +28,7 @@ module.exports = {
                 else if (!plan)
                     res.send(400)
                 else {
-                    return res.send(plan)
+                  res.send(plan)
                     
                 }
                 next()
@@ -59,7 +63,9 @@ module.exports = {
             name,
             description,
             price,
-            credits
+            frequency,
+            type,
+            paypalURLBtn
         } = req.body
         Plan.findOneAndUpdate({
             _id: req.params.id
@@ -68,7 +74,9 @@ module.exports = {
                 name,
                 description,
                 price,
-                credits
+                frequency,
+                type,
+                paypalURLBtn
             }
         }, (err, plan) => {
             if (err) {

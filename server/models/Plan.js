@@ -5,8 +5,12 @@ let PlanSchema = new mongoose.Schema(
         name: String,
         description: String,
         price: Number,
-        credits: Number
+        frequency: String,
+        type: String,
+        paypalURLBtn: String
         
+    }, {
+        timestamps: true
     }
 )
 

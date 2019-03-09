@@ -37,6 +37,18 @@ module.exports = {
                 }
             });})
         },
+        getTxn: (saleId) => {
+            return new Promise((resolve, reject) => {
+            paypal.sale.get(saleId, function (error, sale) {
+            if (error) {
+                return resolve(error);
+            } else {
+                return resolve(JSON.stringify(sale));
+            }
+
+            });
+            })
+        },
         validate: (body) => {
              return new Promise((resolve, reject) => {
                  // Prepend 'cmd=_notify-validate' flag to the post string

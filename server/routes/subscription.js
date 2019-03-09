@@ -24,6 +24,12 @@ module.exports = (router) => {
         .route('/subscription/refund')
         .post(isAuthenticated, subscriptioncontroller.refundSubscription)
     /**
+     * transaction
+     */
+    router
+        .route('/subscription/transaction/:id')
+        .post(isAuthenticated, subscriptioncontroller.getTxnById)
+    /**
      * IPN Lisenter
      */
     router
